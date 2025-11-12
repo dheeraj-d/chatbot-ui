@@ -1,0 +1,68 @@
+<div class="chat-container">
+  <div class="chat-header">
+    <h2>🤖 AI Chatbot</h2>
+    <div class="personality-selector">
+      <label for="personality">Personality:</label>
+      <select 
+        id="personality" 
+        [(ngModel)]="selectedPersonality" 
+        (change)="onPersonalityChange()"
+        class="personality-dropdown">
+        <option *ngFor="let p of personalities" [value]="p.value">
+          {{ p.label }} - {{ p.description }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <div class="chat-box">
+    <div class="messages-container">
+      <div *ngIf="messages.length === 0" class="welcome-message">
+        <h2>👋 Welcome!</h2>
+        <p>Ask me anything and I'll help you out.</p>
+        <p class="personality-hint">💡 Try switching personalities to see different response styles!</p>
+      </div>
+
+      <div *ngFor="let msg of messages" 
+           [class.user-message]="msg.from === 'user'" 
+           [class.bot-message]="msg.from === 'bot'"
+           [class.system-message]="msg.from === 'system'"
+           class="message">
+        <div class="message-content" *ngIf="msg.from !== 'system'">
+          <div class="message-avatar">{{ msg.from === 'user' ? '👤' : '🤖' }}</div>
+          <div class="message-text">{{ msg.text }}</div>
+        </div>
+        <div class="system-text" *ngIf="msg.from === 'system'">
+          {{ msg.text }}
+        </div>
+      </div>
+
+      <div *ngIf="isLoading" class="message bot-message">
+        <div class="message-content">
+          <div class="message-avatar">🤖</div>
+          <div class="message-text loading">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="input-box">
+      <input 
+        [(ngModel)]="userInput" 
+        (keypress)="handleKeyPress($event)"
+        [disabled]="isLoading"
+        placeholder="Type your message here..." 
+        class="chat-input"
+      />
+      <button 
+        (click)="sendMessage()" 
+        [disabled]="!userInput.trim() || isLoading"
+        class="send-button">
+        {{ isLoading ? '⏳' : '📤' }} Send
+      </button>
+    </div>
+  </div>
+</div>
