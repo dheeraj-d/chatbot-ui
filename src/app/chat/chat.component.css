@@ -3,9 +3,23 @@
   flex-direction: column;
   gap: 1rem;
   height: 100vh;
+  height: 100dvh; /* Use dynamic viewport height for mobile browsers */
   padding: 1rem;
+  padding-bottom: max(1rem, env(safe-area-inset-bottom)); /* Account for safe area */
   box-sizing: border-box;
   overflow: hidden;
+  position: relative;
+}
+
+@media (max-width: 768px) {
+  .chat-container {
+    padding: 0.5rem;
+    padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+    gap: 0.5rem;
+    /* Force hardware acceleration for smoother transitions */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+  }
 }
 
 .chat-header {
@@ -102,11 +116,14 @@
   gap: 1rem;
   background: #f8f9fa;
   min-height: 0;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
 }
 
 @media (max-width: 768px) {
   .messages-container {
     padding: 1rem;
+    overscroll-behavior: contain; /* Prevent scroll chaining on mobile */
   }
 }
 
@@ -249,12 +266,17 @@
   background: white;
   border-top: 1px solid #e0e0e0;
   flex-shrink: 0;
+  position: relative;
+  z-index: 10; /* Ensure input stays on top */
 }
 
 @media (max-width: 768px) {
   .input-box {
     padding: 0.75rem 1rem;
+    padding-bottom: max(0.75rem, env(safe-area-inset-bottom)); /* Extra padding for mobile bottom UI */
     gap: 0.5rem;
+    position: sticky;
+    bottom: 0;
   }
 }
 
@@ -271,11 +293,19 @@
 .chat-input:focus {
   outline: none;
   border-color: #667eea;
+  /* Prevent zoom on focus in iOS Safari */
+  -webkit-text-size-adjust: 100%;
 }
 
 .chat-input:disabled {
   background: #f5f5f5;
   cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .chat-input {
+    font-size: 16px; /* Prevents iOS Safari zoom on focus */
+  }
 }
 
 .send-button {

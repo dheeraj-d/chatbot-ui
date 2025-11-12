@@ -9,7 +9,20 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   height: 100vh;
+  height: 100dvh;
   margin: 0;
   padding: 0;
   overflow: hidden;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
+
+/* Prevent iOS Safari from shifting layout when keyboard appears */
+@supports (-webkit-touch-callout: none) {
+  body {
+    position: fixed;
+    overflow: hidden;
+  }
 }
